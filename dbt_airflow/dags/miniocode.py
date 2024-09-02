@@ -24,11 +24,6 @@ import requests
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-
-
-
-
-
 dbt_project_path = ("/usr/local/airflow/dags/")
 
 def delete_folder(schema):

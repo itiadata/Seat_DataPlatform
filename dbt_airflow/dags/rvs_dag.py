@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
 import shutil
-from rvscode import createstage
+from rvscode import createstage,delete_folder
 from airflow.providers.microsoft.azure.sensors.wasb import WasbPrefixSensor
 
 
@@ -34,15 +34,6 @@ dag = DAG(
 dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeout=timedelta(minutes=10)) # Set execution timeout)
 
 
-azure_prefix_sensor = WasbPrefixSensor(
-    task_id='azure_prefix_sensor',
-    container_name='hvr-prueba-csv',
-    prefix='hola_',  # Prefijo general para detectar cualquier blob
-    azure_blob_storage_conn_id='blob_id',
-    timeout=600,
-    poke_interval=60,
-    dag=dag,
-)
 
 CreateStageJob = PythonOperator(
     task_id='CREATE_AND_COPY_DATA',
@@ -53,4 +44,13 @@ CreateStageJob = PythonOperator(
 )
 
 
-dummy_task_start>> azure_prefix_sensor>>CreateStageJob
+CreateStageJob = PythonOperator(
+    task_id='DELETE_FOLDER',
+    python_callable=delete_folder,
+    op_kwargs={},  # Pass additional variables as keyword arguments
+    provide_context=True,
+    dag=dag,
+)
+
+
+dummy_task_start>>CreateStageJob

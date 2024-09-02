@@ -1,6 +1,6 @@
 
 import urllib3
-
+import shutil
 import pandas as pd
 from dotenv import load_dotenv
 from datetime import date
@@ -8,7 +8,7 @@ from pathlib import Path
 from sqlalchemy import create_engine, text
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
-import os, re
+import os, re,unicodedata
 from azure.storage.blob import BlobServiceClient, BlobClient
 
 
@@ -41,6 +41,14 @@ def snowflake_con():
     return engine
     
 
+def remove_accents(input_str):
+    """Elimina los acentos de una cadena de texto."""
+    # Normaliza la cadena para descomponer los caracteres acentuados en su forma base y los acentos
+    nfkd_form = unicodedata.normalize('NFKD', input_str)
+    # Filtra solo los caracteres que no son marcas diacríticas
+    return ''.join(c for c in nfkd_form if not unicodedata.combining(c))
+
+#Detectar automaticamente el delimitador del csv 
 def detect_delimiter(file_path):
 
     with open(file_path, 'r') as file:
@@ -55,7 +63,7 @@ def detect_delimiter(file_path):
         else:
             raise ValueError("Delimiter not found")
 
-
+#executa las queries que estan en rvscode.sql
 def execute_query_by_name(query_name, params ,conn):
     # Lee el archivo SQL
     file_name = dbt_project_path+'rvscode.sql'
@@ -80,17 +88,8 @@ def execute_query_by_name(query_name, params ,conn):
     print((rows[0][0]))
     return (rows[0][0])
 
-def listarfile(blob_service_client):
- 
-    container_client = blob_service_client.get_container_client('hvr-prueba-csv')
 
-    # Listar y filtrar archivos CSV
-    csv_files = [blob.name for blob in container_client.list_blobs() if blob.name.endswith('.csv')]
-
-    # Imprimir los nombres de los archivos CSV
-    print(csv_files)
-
-
+#Descarga el csv y lo inserta a snowflake en forma de tabla 
 def download_blob_to_file(conn):
     blob_service_client = BlobServiceClient(account_url=account_url, credential=sas_token)
     container_client = blob_service_client.get_container_client('hvr-prueba-csv')
@@ -106,32 +105,42 @@ def download_blob_to_file(conn):
         if blob.name.endswith('.csv'):
             # Crear un BlobClient
             blob_client = container_client.get_blob_client(blob)
-            
+            blob_name = remove_accents(blob.name)
             # Ruta completa para guardar el archivo descargado
-            download_file_path = os.path.join(download_folder, blob.name)
+            download_file_path = os.path.join(download_folder, blob_name)
             
             # Descargar el blob
             with open(download_file_path, "wb") as download_file:
                 download_file.write(blob_client.download_blob().readall())
+
             #Si un fichero viene mal formateado le hacemos un arreo
-            name_table = re.sub(r'[^\w]', '_',  os.path.splitext(blob.name)[0])
+            name_table = re.sub(r'[^\w]', '_',  os.path.splitext(blob_name)[0])
             print(name_table)
 
             print(f"Archivo descargado: {download_file_path}")
-            delimiter= detect_delimiter(file_path+'/'+blob.name)
+            delimiter= detect_delimiter(file_path+'/'+blob_name)
+            path_route = download_folder+"/"+blob_name
             print(delimiter)
             execute_query_by_name('databasedefintion',None,conn)
             execute_query_by_name('createstage',None,conn)
-            parametros = {'path_route' : file_path+'/'+blob.name , 'stage_name':'rvs_table.RVS_FILE_CSV','name_csv':blob.name,'name_table': name_table,'delimiter': delimiter}
+            parametros = {'path_route' : path_route , 'stage_name':'rvs_table.RVS_FILE_CSV','name_csv':blob_name,'name_table': name_table,'delimiter': delimiter}
             execute_query_by_name('addfilestage',parametros,conn)
             execute_query_by_name('fileformat',parametros,conn)
             execute_query_by_name('createtable',parametros,conn)
             execute_query_by_name('copyinto',parametros,conn)
 
-
-
-
+#función principal para que funcione todo el proceso
 def createstage():
     conn = snowflake_con()
     download_blob_to_file(conn)
+
+def delete_folder():
+    folder=dbt_project_path+'descargas_csv'
+    if os.path.isdir(folder):
+        shutil.rmtree(folder)
+    elif os.path.isfile(folder):
+        os.remove(folder)
+    else:
+        print(f"The path {folder} does not exist.")
+     
 

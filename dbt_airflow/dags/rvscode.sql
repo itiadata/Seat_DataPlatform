@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS  rvs_table.{name_table}
 CREATE STAGE IF NOT EXISTS rvs_table.RVS_FILE_CSV;
 
 --@databasedefintion
-USE DATABASE RVS
+USE DATABASE RVS;
 
 
 --@addfilestage
