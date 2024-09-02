@@ -44,7 +44,7 @@ CreateStageJob = PythonOperator(
 )
 
 
-CreateStageJob = PythonOperator(
+deletefolder = PythonOperator(
     task_id='DELETE_FOLDER',
     python_callable=delete_folder,
     op_kwargs={},  # Pass additional variables as keyword arguments
@@ -53,4 +53,4 @@ CreateStageJob = PythonOperator(
 )
 
 
-dummy_task_start>>CreateStageJob
+dummy_task_start>>CreateStageJob>>deletefolder
