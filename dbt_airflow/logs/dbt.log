@@ -1,0 +1,20 @@
+[0m11:39:23.508876 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1093c6f50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109455f90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1094567d0>]}
+
+
+============================== 11:39:23.511441 | d9065d92-ef5a-45a6-a021-0d1f3eafd398 ==============================
+[0m11:39:23.511441 [info ] [MainThread]: Running with dbt=1.7.9
+[0m11:39:23.511753 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'log_cache_events': 'False', 'write_json': 'True', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/Users/sxawwla/.dbt', 'version_check': 'True', 'debug': 'False', 'log_path': 'logs', 'fail_fast': 'False', 'warn_error': 'None', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'log_format': 'default', 'static_parser': 'True', 'target_path': 'None', 'invocation_command': 'dbt debug', 'send_anonymous_usage_stats': 'True'}
+[0m11:39:23.512104 [info ] [MainThread]: dbt version: 1.7.9
+[0m11:39:23.512256 [info ] [MainThread]: python version: 3.11.5
+[0m11:39:23.512394 [info ] [MainThread]: python path: /Users/sxawwla/anaconda3/bin/python
+[0m11:39:23.512519 [info ] [MainThread]: os info: macOS-14.4.1-arm64-arm-64bit
+[0m11:39:24.708099 [info ] [MainThread]: Using profiles dir at /Users/sxawwla/.dbt
+[0m11:39:24.708386 [info ] [MainThread]: Using profiles.yml file at /Users/sxawwla/.dbt/profiles.yml
+[0m11:39:24.708550 [info ] [MainThread]: Using dbt_project.yml file at /Users/sxawwla/Documents/GitHub/AirflowDBTdev/dbt_airflow/dbt_project.yml
+[0m11:39:24.708722 [error] [MainThread]: Encountered an error:
+Internal Error
+  Profile should not be None if loading profile completed
+[0m11:39:24.715013 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_wall_clock_time": 1.2456508, "process_user_time": 1.766718, "process_kernel_time": 2.127582, "process_mem_max_rss": "191660032", "command_success": false, "process_in_blocks": "0", "process_out_blocks": "0"}
+[0m11:39:24.715304 [debug] [MainThread]: Command `dbt debug` failed at 11:39:24.715245 after 1.25 seconds
+[0m11:39:24.715471 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x109456250>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1094566d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x1048e2a50>]}
+[0m11:39:24.715651 [debug] [MainThread]: Flushing usage events

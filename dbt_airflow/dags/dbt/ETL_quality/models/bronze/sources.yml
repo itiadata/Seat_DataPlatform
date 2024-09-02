@@ -1,0 +1,21 @@
+verison: 2
+
+sources:
+  - name: COVID19_EPIDEMIOLOGICAL_DATA
+    database: COVID19_EPIDEMIOLOGICAL_DATA
+    schema: public
+    tables:
+      - name: DEMOGRAPHICS
+      
+            
+            
+            
+            
+          
+            
+            
+            
+            
+            
+            
+            

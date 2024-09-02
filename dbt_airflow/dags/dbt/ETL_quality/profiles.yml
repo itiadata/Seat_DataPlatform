@@ -1,0 +1,17 @@
+ETL_quality:
+  outputs:
+    dev:
+      account: hu69225.west-europe.azure
+      database: COVID19_EPIDEMIOLOGICAL_DATA
+      password: Josanca725
+      role: ACCOUNTADMIN
+      schema: public
+      threads: 1
+      type: snowflake
+      user: sxawwla1User
+      warehouse: COMPUTE_DEV 
+      proxy_host : 10.82.32.254
+      proxy_port : 80
+
+  target: dev
+
