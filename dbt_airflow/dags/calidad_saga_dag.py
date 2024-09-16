@@ -47,7 +47,7 @@ dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeo
 SA_SLT_ANTRSCHADEN_job = PythonOperator(
     task_id='DI_SLT_NACHRICHT',
     python_callable=task_main,
-    op_kwargs={'Schema':'SAGA'  , 'Tabla':'SA_SLT_ANTRSCHADEN', 'year':2024, 'month':1 },  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'SAGA'  , 'Tabla':'SA_SLT_ANTRSCHADEN', 'year':2024, 'month':8 },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -55,7 +55,7 @@ SA_SLT_ANTRSCHADEN_job = PythonOperator(
 SA_SLT_ANTRSCHADEN_APETFLFM_job = PythonOperator(
     task_id='SA_SLT_ANTRSCHADEN_APETFLFM',
     python_callable=task_main,
-    op_kwargs={'Schema':'SAGA'  , 'Tabla':'SA_SLT_ANTRSCHADEN_APETFLFM','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'SAGA'  , 'Tabla':'SA_SLT_ANTRSCHADEN_APETFLFM','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )

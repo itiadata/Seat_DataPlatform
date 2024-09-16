@@ -21,7 +21,7 @@ USE DATABASE RVS;
 --@addfilestage
 PUT file://{path_route} @{stage_name};
 
---@fileformat
+--@fileformat_csv
 
 CREATE OR REPLACE FILE FORMAT  rvs_table.CSV_FILE_FORMAT
     TYPE = 'CSV'
@@ -31,6 +31,11 @@ CREATE OR REPLACE FILE FORMAT  rvs_table.CSV_FILE_FORMAT
     NULL_IF = ('NULL')
     COMPRESSION = 'GZIP';
 
+
+--@fileformat_parquet
+CREATE FILE FORMAT IF NOT EXISTS  rvs_table.PARQUET_FILE_FORMAT
+  TYPE = 'PARQUET'
+  COMPRESSION = 'SNAPPY';
 
 --@copyinto
 

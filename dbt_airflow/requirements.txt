@@ -10,3 +10,6 @@ snowflake-connector-python
 certifi
 azure-storage-blob 
 azure-identity
+xmltodict
+openpyxl
+pandas

@@ -46,7 +46,7 @@ dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeo
 DI_SLT_ANFRAGE_job = PythonOperator(
     task_id='DI_SLT_ANFRAGE_JOB',
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_ANFRAGE','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_ANFRAGE','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -54,7 +54,7 @@ DI_SLT_ANFRAGE_job = PythonOperator(
 DI_SLT_BEANSTANDUNG_job = PythonOperator(
     task_id='DI_SLT_BEANSTANDUNG',
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BEANSTANDUNG','year':2024 , 'month':1 } ,  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BEANSTANDUNG','year':2024 , 'month':8 } ,  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -62,7 +62,7 @@ DI_SLT_BEANSTANDUNG_job = PythonOperator(
 DI_SLT_BILDPOSITION_job = PythonOperator(
     task_id='DI_SLT_BILDPOSITION',
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BILDPOSITION','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BILDPOSITION','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -70,7 +70,7 @@ DI_SLT_BILDPOSITION_job = PythonOperator(
 DI_SLT_NACHRICHT_job = PythonOperator(
     task_id='DI_SLT_NACHRICHT',
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_NACHRICHT', 'year':2024 , 'month':1 },  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_NACHRICHT', 'year':2024 , 'month':8 },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -78,7 +78,7 @@ DI_SLT_NACHRICHT_job = PythonOperator(
 DI_SLT_RANDBEDINGUNG_job = PythonOperator(
     task_id='DI_SLT_RANDBEDINGUNG',
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_RANDBEDINGUNG','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_RANDBEDINGUNG','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )

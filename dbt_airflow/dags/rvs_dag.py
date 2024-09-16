@@ -22,7 +22,7 @@ default_args = {
 
 # Define the DAG
 dag = DAG(
-    dag_id="rvs_dag",
+    dag_id="RVS_DAG",
     default_args=default_args,  # Include default_args here
     start_date=datetime(2024, 1, 1),
     schedule_interval="@daily",

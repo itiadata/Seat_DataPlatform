@@ -46,7 +46,7 @@ dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeo
 CA_SLT_FAHRZEUG_JOB = PythonOperator(
     task_id='CA_SLT_FAHRZEUG',
     python_callable=task_main,
-    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -54,7 +54,7 @@ CA_SLT_FAHRZEUG_JOB = PythonOperator(
 CA_SLT_FAHRZEUG_FILTER_JOB = PythonOperator(
     task_id='CA_SLT_FAHRZEUG_FILTER',
     python_callable=task_main,
-    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_FILTER','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_FILTER'},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -62,7 +62,7 @@ CA_SLT_FAHRZEUG_FILTER_JOB = PythonOperator(
 CA_SLT_FAHRZEUG_PRNR_JOB = PythonOperator(
     task_id='CA_SLT_FAHRZEUG_PRNR',
     python_callable=task_main,
-    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_PRNR','year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_PRNR','year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
@@ -70,7 +70,7 @@ CA_SLT_FAHRZEUG_PRNR_JOB = PythonOperator(
 CA_SLT_FAHRZEUG_PRNR_STRING_JOB = PythonOperator(
     task_id='CA_SLT_FAHRZEUG_PRNR_STRING',
     python_callable=task_main,
-    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_PRNR_STRING', 'year':2024 , 'month':1},  # Pass additional variables as keyword arguments
+    op_kwargs={'Schema':'CARPORT'  , 'Tabla':'CA_SLT_FAHRZEUG_PRNR_STRING', 'year':2024 , 'month':8},  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )

@@ -138,22 +138,24 @@ def insert_to_sourcetable(name,conn):
     partes = name.split('/')
     table = partes[1]
     schema = partes[0]
-    name_parquet = partes[4]
     fecha = date.today()
     add = {'table_name': table, 'fecha': fecha, 'name_file': name, 'schema':schema}
     execute_query_by_name('inserdata',add,conn)
 
 def insert_to_snowflake(tabla,file_path, schema ,engine):
+        print(file_path)
         partes = file_path.split('/')
-        name_parquet = partes[9]
+        size=len(partes)
+        name_parquet = partes[size-1]
+
         print(name_parquet)
-        database='DEV_STAGING_DB'
+        database='PRO_BRONZE_DB'
         stage = f"{database}.{schema}.{tabla}"
 
         arguments = {'stage_name':stage, 'schema': schema, 'nametable': tabla,'name':file_path,'name_parquet':name_parquet}
         
         val= execute_query_by_name('existstage',arguments,engine)
-        if int(val) == 0 :
+        if int(val) == 0 :    
             execute_query_by_name('createstage',arguments,engine)
         execute_query_by_name('addfilestage',arguments,engine)
         #execute_query_by_name('createformat',arguments,engine)
@@ -223,40 +225,45 @@ def func(schema,tabla,year,month):
     sleep(5)
     #procese de descarga de los parquet y su tratamiento
     try:
-        objects = client.list_objects(bucket_name, prefix=prefix+'/'+tabla+'/DAPC_YEAR='+str(year)+'/DAPC_MONTH='+str(month), recursive=recursive)
-        
+        if ((schema == 'STAMMDATEN' ) or tabla == 'CA_SLT_FAHRZEUG_FILTER' and schema == 'CARPORT'):
+             objects = client.list_objects(bucket_name, prefix=prefix+'/'+tabla, recursive=recursive)
+        else:
+            objects = client.list_objects(bucket_name, prefix=prefix+'/'+tabla+'/DAPC_YEAR='+str(year)+'/DAPC_MONTH='+str(month), recursive=recursive)
+
         engine = snowflake_con('your_schema')
  
         filestart = schema+'/'+tabla
 
         parametros = {'schema' : schema, 'name':''}
         execute_query_by_name('defaultdatabase', parametros,engine)
-        execute_query_by_name('createschema', parametros,engine)
+        #execute_query_by_name('createschema', parametros,engine)
         execute_query_by_name('createcontrol', parametros,engine)
-        execute_query_by_name('createformat', parametros,engine)
+        #execute_query_by_name('createformat', parametros,engine)
+
+
 
 
         if  int(execute_query_by_name('firstload', parametros,engine)) == 0 :
-            for obj in objects:
-                name =obj.object_name
-                print(name)
-                if (obj.object_name).endswith(".parquet") and     (obj.object_name).startswith(filestart+'/DAPC_YEAR')  and not (obj.object_name).endswith("checkpoint.parquet") and devolver_year(name)==year and devolver_mes(name)==month :
-                    object_name = obj.object_name
-                    processwritesnowflake(object_name,client,bucket_name,engine,tabla)
-        else:
-            for obj in objects:
-                name =obj.object_name
-                print(name)
-                if (obj.object_name).endswith(".parquet") and  (obj.object_name).startswith(filestart+'/DAPC_YEAR')  and not (obj.object_name).endswith("checkpoint.parquet") and devolver_year(name)==year and devolver_mes(name)==month :
-                    parametros = {'name': obj.object_name, 'schema': schema}
-                    val=execute_query_by_name('existeparquet', parametros,engine)
-                    print(val)
-                    if (int(val) == 0):
+                for obj in objects:
+                    name =obj.object_name
+                    print(name)
+                    if (obj.object_name).endswith(".parquet") and ( ((obj.object_name).startswith(filestart+'/DAPC_LADEDATUM') ) or ((obj.object_name).startswith(filestart+'/folder_'))or ((obj.object_name).startswith(filestart+'/DAPC_YEAR') and devolver_year(name)==year and devolver_mes(name)==month )) and not (obj.object_name).endswith("checkpoint.parquet")   :
                         object_name = obj.object_name
                         processwritesnowflake(object_name,client,bucket_name,engine,tabla)
-                       
-                    else :
-                        continue
+        else:
+                for obj in objects:
+                    name =obj.object_name
+                    print(name)
+                    if (obj.object_name).endswith(".parquet") and ( ((obj.object_name).startswith(filestart+'/DAPC_LADEDATUM') ) or ((obj.object_name).startswith(filestart+'/folder_'))or ((obj.object_name).startswith(filestart+'/DAPC_YEAR') and devolver_year(name)==year and devolver_mes(name)==month )) and not (obj.object_name).endswith("checkpoint.parquet")   :
+                        parametros = {'name': obj.object_name, 'schema': schema}
+                        val=execute_query_by_name('existeparquet', parametros,engine)
+                        print(val)
+                        if (int(val) == 0):
+                            object_name = obj.object_name
+                            processwritesnowflake(object_name,client,bucket_name,engine,tabla)
+                        
+                        else :
+                            continue
         engine.close()
        
     except S3Error as e:

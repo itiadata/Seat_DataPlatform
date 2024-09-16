@@ -1,15 +1,16 @@
-
-import urllib3
-import shutil
-import pandas as pd
-from dotenv import load_dotenv
 from datetime import date
 from pathlib import Path
 from sqlalchemy import create_engine, text
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
-import os, re,unicodedata
+from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient, BlobClient
+import urllib3
+import shutil
+import pandas as pd
+import os, re,unicodedata
+import xmltodict
+import json
 
 
 
@@ -19,6 +20,51 @@ load_dotenv()
 account_url = os.getenv("account_url")
 sas_token= os.getenv("sas_token")
 file_path = dbt_project_path+"descargas_csv"  # Ruta local donde se guardará el archivo
+
+def change_format(download_file_path,blob_name):
+
+    new_name = os.path.splitext(blob_name)[0]
+    path_xlsx=download_file_path+'/'+blob_name
+    if (blob_name.endswith('.xlsx')):
+        new_name = os.path.splitext(blob_name)[0]
+        # Lee el archivo Excel
+        df = pd.read_excel(path_xlsx)
+        # Especifica la ruta del archivo CSV de salida
+        csv_file = download_file_path+'/'+new_name+'.csv'
+        # Escribe el DataFrame en un archivo CSV
+        df.to_csv(csv_file, index=False)
+        print(f"El archivo {file_path} ha sido convertido a {csv_file}.")
+        delete_file(path_xlsx)
+        return new_name+'.csv'
+    elif blob_name.endswith('.xml'):
+
+        # Especifica la ruta del archivo JSON de salida
+        json_file = download_file_path+'/'+new_name+'.json'
+        # Lee el archivo XML
+        with open(download_file_path+'/'+blob_name, 'r') as file:
+            xml_content = file.read()
+        # Convierte el XML a un diccionario de Python
+        data_dict = xmltodict.parse(xml_content)
+        # Convierte el diccionario a un JSON
+        json_data = json.dumps(data_dict, indent=4)  # indent=4 para un JSON bien formateado
+        # Guarda el JSON en un archivo
+        with open(json_file, 'w') as file:
+            file.write(json_data)
+        print(f"El archivo {file_path} ha sido convertido a {json_file}.")
+
+    
+    else :
+        return blob_name
+
+   
+def delete_file(file_path):
+    # Verifica si el archivo existe antes de intentar eliminarlo
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        print(f"El archivo {file_path} ha sido eliminado.")
+    else:
+        print(f"El archivo {file_path} no existe.")
+
 
 
 def snowflake_con():
@@ -96,16 +142,21 @@ def download_blob_to_file(conn):
     print(container_client)
     download_folder=dbt_project_path+'descargas_csv'
     os.makedirs(download_folder, exist_ok=True)
+    allowed_extensions = ['.csv', '.xml', '.json','xlsx']
+
 
     # Listar y descargar los archivos CSV
     blobs = container_client.list_blobs()
     print(blobs)
 
     for blob in blobs:
-        if blob.name.endswith('.csv'):
+        if any(blob.name.endswith(ext) for ext in allowed_extensions):
             # Crear un BlobClient
+           
             blob_client = container_client.get_blob_client(blob)
+            print('el nombre del archivo es: '+ blob.name)
             blob_name = remove_accents(blob.name)
+
             # Ruta completa para guardar el archivo descargado
             download_file_path = os.path.join(download_folder, blob_name)
             
@@ -117,23 +168,29 @@ def download_blob_to_file(conn):
             name_table = re.sub(r'[^\w]', '_',  os.path.splitext(blob_name)[0])
             print(name_table)
 
+            blob_name=change_format(download_folder,blob_name)
+            print(blob_name)
+
             print(f"Archivo descargado: {download_file_path}")
             delimiter= detect_delimiter(file_path+'/'+blob_name)
             path_route = download_folder+"/"+blob_name
-            print(delimiter)
             execute_query_by_name('databasedefintion',None,conn)
             execute_query_by_name('createstage',None,conn)
             parametros = {'path_route' : path_route , 'stage_name':'rvs_table.RVS_FILE_CSV','name_csv':blob_name,'name_table': name_table,'delimiter': delimiter}
             execute_query_by_name('addfilestage',parametros,conn)
-            execute_query_by_name('fileformat',parametros,conn)
+            execute_query_by_name('fileformat_csv',parametros,conn)
             execute_query_by_name('createtable',parametros,conn)
             execute_query_by_name('copyinto',parametros,conn)
+            #Elimina el fichero del blob
+            blob_client.delete_blob()
+
 
 #función principal para que funcione todo el proceso
 def createstage():
     conn = snowflake_con()
     download_blob_to_file(conn)
 
+#Funcion para hacer el delete del folder , de esa manera no es permanete en el proyecto
 def delete_folder():
     folder=dbt_project_path+'descargas_csv'
     if os.path.isdir(folder):
