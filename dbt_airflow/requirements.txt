@@ -13,3 +13,4 @@ azure-identity
 xmltodict
 openpyxl
 pandas
+airflow-dbt

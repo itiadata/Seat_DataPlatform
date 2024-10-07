@@ -7,6 +7,8 @@ EXPOSE 80
 ENV HTTP_PROXY=http://10.82.32.254:80
 ENV HTTPS_PROXY=http://10.82.32.254:80
 
+
+
 # Crear y activar un entorno virtual de Python, instalar dbt-snowflake usando el proxy y luego desactivar el entorno virtual
 RUN python -m venv dbt_venv && \
     source dbt_venv/bin/activate && \

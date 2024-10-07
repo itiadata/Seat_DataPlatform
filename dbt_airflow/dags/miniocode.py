@@ -5,17 +5,16 @@ from urllib3 import Retry
 import socket
 import pandas as pd
 import glob, os
-from dotenv import load_dotenv
-import snowflake.connector
-from sqlalchemy.orm import sessionmaker
+
 import shutil
 from datetime import date
 from pathlib import Path
-from snowflake.sqlalchemy import URL
-from sqlalchemy import create_engine, text
+from datetime import datetime
 from time import sleep
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
+
+from utils.utils import execute_query_by_name
 
 import requests
 
@@ -102,33 +101,6 @@ def snowflake_con(schema):
     
     return engine
     
-   
-
-def execute_query_by_name(query_name, params,conn):
-    # Lee el archivo SQL
-    file_name = dbt_project_path+'minicode.sql'
-    print(file_name)
-
-    with open(file_name, 'r') as file:
-        contenido = file.read()
-        consultas = contenido.split('--')
-        consulta_sql = ''
-        for consulta in consultas:
-            if consulta.strip().startswith(f"@{query_name}"):
-                consulta_sql = consulta.strip().split("\n", 1)[1].strip()
-                break
-        else:
-            raise ValueError("No se encontró la consulta especificada en el archivo")
-        
-            
-
-    #executa la query que se manda
-    consulta_formateada = consulta_sql.format(**params)
-    print(consulta_formateada)
-    result=conn.execute(consulta_formateada)
-    rows = result.fetchall()
-    print((rows[0][0]))
-    return (rows[0][0])
 
 
 hostname = 'storage.esqa.dapc.ocp.vwgroup.com'
@@ -140,9 +112,9 @@ def insert_to_sourcetable(name,conn):
     schema = partes[0]
     fecha = date.today()
     add = {'table_name': table, 'fecha': fecha, 'name_file': name, 'schema':schema}
-    execute_query_by_name('inserdata',add,conn)
+    execute_query_by_name('inserdata',add,conn,'minicode.sql')
 
-def insert_to_snowflake(tabla,file_path, schema ,engine):
+def insert_to_snowflake(tabla,file_path, schema ,engine,firsload):
         print(file_path)
         partes = file_path.split('/')
         size=len(partes)
@@ -151,19 +123,29 @@ def insert_to_snowflake(tabla,file_path, schema ,engine):
         print(name_parquet)
         database='PRO_BRONZE_DB'
         stage = f"{database}.{schema}.{tabla}"
+        taux_tabla = 'taux_'+str(datetime.today().strftime('%Y%m%d'))+'_'+tabla
 
-        arguments = {'stage_name':stage, 'schema': schema, 'nametable': tabla,'name':file_path,'name_parquet':name_parquet}
+
+        arguments = {'stage_name':stage, 'schema': schema, 'nametable': tabla,'name':file_path,'name_parquet':name_parquet, 'taux_nametable':taux_tabla}
         
-        val= execute_query_by_name('existstage',arguments,engine)
+        val= execute_query_by_name('existstage',arguments,engine,'minicode.sql')
         if int(val) == 0 :    
-            execute_query_by_name('createstage',arguments,engine)
-        execute_query_by_name('addfilestage',arguments,engine)
+            execute_query_by_name('createstage',arguments,engine,'minicode.sql')
+        execute_query_by_name('addfilestage',arguments,engine,'minicode.sql')
         #execute_query_by_name('createformat',arguments,engine)
-        execute_query_by_name('createtable',arguments,engine)
-        execute_query_by_name('copytotable',arguments,engine)
+        if firsload == 1 : 
+         execute_query_by_name('createtable',arguments,engine,'minicode.sql')
+        
+        execute_query_by_name('createtabletaux',arguments,engine,'minicode.sql')
+
+        execute_query_by_name('copytotable',arguments,engine,'minicode.sql')
+        execute_query_by_name('insert_to_finall_table',arguments,engine,'minicode.sql')
+        execute_query_by_name('remove_taux_table',arguments,engine,'minicode.sql')
+
+
         #execute_query_by_name('removestage',arguments,engine)
 
-def processwritesnowflake(object_name,client,bucket_name,engine,tabla):
+def processwritesnowflake(object_name,client,bucket_name,engine,tabla,firsload):
     file_path = dbt_project_path+object_name  # Ruta local donde se guardará el archivo
     client.fget_object(bucket_name, object_name, file_path)
     print(f"Archivo descargado: {object_name}")
@@ -171,7 +153,7 @@ def processwritesnowflake(object_name,client,bucket_name,engine,tabla):
     #inserta source table control
     #insertar datos a snowflake
     partes = object_name.split('/')
-    insert_to_snowflake(tabla,file_path, partes[0] ,engine)
+    insert_to_snowflake(tabla,file_path, partes[0] ,engine,firsload)
     insert_to_sourcetable(object_name,engine)
     #eliminar archivo
     sleep(10)
@@ -234,33 +216,33 @@ def func(schema,tabla,year,month):
  
         filestart = schema+'/'+tabla
 
-        parametros = {'schema' : schema, 'name':''}
-        execute_query_by_name('defaultdatabase', parametros,engine)
+        parametros = {'schema' : schema, 'nametable':tabla}
+        execute_query_by_name('defaultdatabase', parametros,engine,'minicode.sql')
         #execute_query_by_name('createschema', parametros,engine)
-        execute_query_by_name('createcontrol', parametros,engine)
+        execute_query_by_name('createcontrol', parametros,engine,'minicode.sql')
         #execute_query_by_name('createformat', parametros,engine)
 
 
 
 
-        if  int(execute_query_by_name('firstload', parametros,engine)) == 0 :
+        if  int(execute_query_by_name('firstload', parametros,engine,'minicode.sql')) == 0 :
                 for obj in objects:
                     name =obj.object_name
                     print(name)
                     if (obj.object_name).endswith(".parquet") and ( ((obj.object_name).startswith(filestart+'/DAPC_LADEDATUM') ) or ((obj.object_name).startswith(filestart+'/folder_'))or ((obj.object_name).startswith(filestart+'/DAPC_YEAR') and devolver_year(name)==year and devolver_mes(name)==month )) and not (obj.object_name).endswith("checkpoint.parquet")   :
                         object_name = obj.object_name
-                        processwritesnowflake(object_name,client,bucket_name,engine,tabla)
+                        processwritesnowflake(object_name,client,bucket_name,engine,tabla,1)
         else:
                 for obj in objects:
                     name =obj.object_name
                     print(name)
                     if (obj.object_name).endswith(".parquet") and ( ((obj.object_name).startswith(filestart+'/DAPC_LADEDATUM') ) or ((obj.object_name).startswith(filestart+'/folder_'))or ((obj.object_name).startswith(filestart+'/DAPC_YEAR') and devolver_year(name)==year and devolver_mes(name)==month )) and not (obj.object_name).endswith("checkpoint.parquet")   :
-                        parametros = {'name': obj.object_name, 'schema': schema}
-                        val=execute_query_by_name('existeparquet', parametros,engine)
+                        parametros = {'nametable': obj.object_name, 'schema': schema}
+                        val=execute_query_by_name('existeparquet', parametros,engine,'minicode.sql')
                         print(val)
                         if (int(val) == 0):
                             object_name = obj.object_name
-                            processwritesnowflake(object_name,client,bucket_name,engine,tabla)
+                            processwritesnowflake(object_name,client,bucket_name,engine,tabla,0)
                         
                         else :
                             continue

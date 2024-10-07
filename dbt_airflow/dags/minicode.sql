@@ -2,11 +2,12 @@
 -- @existeparquet
 select count (name_file)
 from PRO_BRONZE_DB.{schema}.CONTROL_PARQUETS
-where name_file =  '{name}' ;
+where name_file =  '{nametable}' ;
 
 -- @firstload
 select count(distinct name_file )
-from PRO_BRONZE_DB.{schema}.CONTROL_PARQUETS;
+from PRO_BRONZE_DB.{schema}.CONTROL_PARQUETS
+where table_name = '{nametable}';
 
 --@existstage
 SELECT COUNT(*)
@@ -30,6 +31,10 @@ CREATE TABLE IF NOT EXISTS  PRO_BRONZE_DB.{schema}.{nametable}
           FILE_FORMAT=>'PRO_BRONZE_DB.{schema}.my_parquet_format'
         )
       ));
+
+  
+--@createtabletaux
+CREATE TABLE IF NOT EXISTS  PRO_BRONZE_DB.{schema}.{taux_nametable} LIKE PRO_BRONZE_DB.{schema}.{nametable};
    
 --@createformat
 CREATE FILE FORMAT IF NOT EXISTS  PRO_BRONZE_DB.{schema}.my_parquet_format
@@ -38,7 +43,7 @@ CREATE FILE FORMAT IF NOT EXISTS  PRO_BRONZE_DB.{schema}.my_parquet_format
 
 
 --@copytotable
-COPY INTO PRO_BRONZE_DB.{schema}.{nametable}
+COPY INTO PRO_BRONZE_DB.{schema}.{taux_nametable}
 FROM @{stage_name}/{name_parquet}
 FILE_FORMAT = (TYPE = 'PARQUET')
 MATCH_BY_COLUMN_NAME = CASE_SENSITIVE
@@ -66,4 +71,19 @@ CREATE SCHEMA IF NOT EXISTS PRO_BRONZE_DB.{schema};
 --@defaultdatabase
 USE DATABASE PRO_BRONZE_DB;
 
+--@insert_to_finall_table
+insert into PRO_BRONZE_DB.{schema}.{nametable} (
+  select  A.*, CONVERT_TIMEZONE('UTC',CURRENT_TIMESTAMP())::TIMESTAMP_NTZ AS INSERT_DATE_UTC
 
+  from 
+    (
+      select * exclude INSERT_DATE_UTC
+      from PRO_BRONZE_DB.{schema}.{taux_nametable}
+      minus 
+      select * exclude INSERT_DATE_UTC
+      from PRO_BRONZE_DB.{schema}.{nametable}
+    )A
+);
+
+--@remove_taux_table
+drop table PRO_BRONZE_DB.{schema}.{taux_nametable};
