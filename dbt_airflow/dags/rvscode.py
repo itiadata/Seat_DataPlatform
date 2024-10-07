@@ -1,8 +1,15 @@
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
 from dotenv import load_dotenv
 from azure.storage.blob import BlobServiceClient
-import shutil,os, re,unicodedata,xmltodict,json
 import pandas as pd
+import shutil
+import os
+import re
+import unicodedata
+import xmltodict
+import json
+import pandas as pd
+
 
 
 # Variables locales 

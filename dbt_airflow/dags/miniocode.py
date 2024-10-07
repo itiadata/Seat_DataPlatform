@@ -1,15 +1,17 @@
 from minio import Minio
 from minio.error import S3Error
-import urllib3,socket,os,shutil
 from urllib3 import Retry
 from datetime import datetime,date
 from time import sleep
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
-
 from utils.utils import execute_query_by_name
-
+import urllib3
+import socket
+import os
+import shutil
 import requests
+
 
 
 
