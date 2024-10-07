@@ -22,7 +22,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install flake8 mypy
           pip install -r dbt_airflow/requirements.txt
-          pip install types-requests types-python-dotenv types-Pytest  # Install type stubs
+          pip install types-requests  # Only install available type stubs
 
 
       - name: Install Astronomer CLI
