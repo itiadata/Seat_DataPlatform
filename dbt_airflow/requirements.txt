@@ -18,7 +18,5 @@ airflow-dbt
 pandas-stubs
 types-requests
 types-xmltodict
-pandas-stubs
 types-requests
 types-sqlalchemy
-

@@ -38,6 +38,9 @@ jobs:
           flake8 dbt_airflow/dags/ || (echo "Flake8 found issues." && exit 1)
 
 
+      - name: Run Bandit
+        run: bandit -r dbt_airflow/dags/ 
+
 
 
   test-dbt:
