@@ -14,3 +14,7 @@ xmltodict
 openpyxl
 pandas
 airflow-dbt
+pandas-stubs
+types-requests
+types-xmltodict
+types-pytest
