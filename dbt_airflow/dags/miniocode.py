@@ -2,8 +2,7 @@ from minio import Minio
 from minio.error import S3Error
 import urllib3,socket,os,shutil
 from urllib3 import Retry
-from datetime import date
-from datetime import datetime
+from datetime import datetime,date
 from time import sleep
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook

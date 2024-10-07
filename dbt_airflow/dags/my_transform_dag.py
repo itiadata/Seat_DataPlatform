@@ -1,19 +1,11 @@
 from datetime import datetime
 from airflow import DAG
 from airflow.operators.bash import BashOperator
-from airflow.providers.microsoft.azure.operators.container_instances import AzureContainerInstancesOperator
 from datetime import  timedelta
 from airflow.sensors.external_task import ExternalTaskSensor
 
-
-
-
 dbt_project_path = "/usr/local/airflow/dags/dbt/ETL_quality"
 dbt_venv_path = "/usr/local/airflow/dbt_venv"
-
-
-
-
 
 default_args = {
     'owner': 'airflow',
