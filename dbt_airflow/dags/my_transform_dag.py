@@ -1,9 +1,7 @@
 from datetime import datetime
-import os
 from airflow import DAG
 from airflow.operators.bash import BashOperator
 from airflow.providers.microsoft.azure.operators.container_instances import AzureContainerInstancesOperator
-from pathlib import Path
 from datetime import  timedelta
 from airflow.sensors.external_task import ExternalTaskSensor
 

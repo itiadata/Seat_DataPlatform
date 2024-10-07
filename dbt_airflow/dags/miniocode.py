@@ -1,14 +1,8 @@
 from minio import Minio
 from minio.error import S3Error
-import urllib3
+import urllib3,socket,os,shutil
 from urllib3 import Retry
-import socket
-import pandas as pd
-import glob, os
-
-import shutil
 from datetime import date
-from pathlib import Path
 from datetime import datetime
 from time import sleep
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
@@ -204,7 +198,6 @@ def func(schema,tabla,year,month):
 
     prefix = schema
     recursive = True
-    listaobjet=[]
     sleep(5)
     #procese de descarga de los parquet y su tratamiento
     try:

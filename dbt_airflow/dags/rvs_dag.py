@@ -1,10 +1,8 @@
 from airflow.models import DAG
-from airflow.models.baseoperator import chain
 from pendulum import datetime
 from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-import shutil
 from rvscode import createstage,delete_folder
 from airflow.providers.microsoft.azure.sensors.wasb import WasbPrefixSensor
 

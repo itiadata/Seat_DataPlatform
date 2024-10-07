@@ -1,17 +1,8 @@
-from datetime import date
-from pathlib import Path
-from sqlalchemy import create_engine, text
-from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
 from dotenv import load_dotenv
-from azure.storage.blob import BlobServiceClient, BlobClient
-import urllib3
-import shutil
+from azure.storage.blob import BlobServiceClient
+import shutil,os, re,unicodedata,xmltodict,json
 import pandas as pd
-import os, re,unicodedata
-import xmltodict
-import json
-
 
 
 # Variables locales 
