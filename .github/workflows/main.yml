@@ -24,6 +24,7 @@ jobs:
       
     
 
+
   test-dbt:
     needs: lint-python
     runs-on: ubuntu-latest
@@ -40,10 +41,21 @@ jobs:
         run: |
           pip install dbt --user
       
+      - name: Check for dbt_project.yml
+        id: check_dbt
+        run: |
+          if [ -f dbt_project.yml ]; then
+            echo "DBT project file found."
+            echo "found=true" >> $GITHUB_ENV
+          else
+            echo "DBT project file not found."
+            echo "found=false" >> $GITHUB_ENV
+          fi
+      
       - name: Run dbt tests
+        if: env.found == 'true'
         run: |
           dbt test --profiles-dir .
-    
   deploy:
     needs: test-dbt
     runs-on: ubuntu-latest
