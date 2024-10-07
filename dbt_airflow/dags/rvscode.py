@@ -8,7 +8,6 @@ import re
 import unicodedata
 import xmltodict
 import json
-import pandas as pd
 
 
 # Variables locales
