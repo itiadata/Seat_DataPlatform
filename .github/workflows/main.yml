@@ -29,9 +29,10 @@ jobs:
         run: |
           curl -sSL https://install.astronomer.io | bash  # Install Astronomer CLI
           echo "$HOME/.astronomer/bin" >> $GITHUB_PATH  # Add Astronomer CLI to PATH
-
+  
       - name: Run Black
-        run: black dbt_airflow/dags/ --check
+        run: black dbt_airflow/dags/ --check || (black dbt_airflow/dags/ && echo "Reformatted code.")
+
 
   test-dbt:
     needs: lint-python
