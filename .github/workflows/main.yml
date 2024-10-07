@@ -23,9 +23,7 @@ jobs:
           pip install flake8 mypy
           pip install -r dbt_airflow/requirements.txt
       
-      - name: Install missing types for mypy
-        run: |
-          mypy --install-types
+  
       
       - name: Type check with mypy
         run: |
