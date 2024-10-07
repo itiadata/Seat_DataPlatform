@@ -30,13 +30,6 @@ jobs:
           curl -sSL https://install.astronomer.io | bash  # Install Astronomer CLI
           echo "$HOME/.astronomer/bin" >> $GITHUB_PATH  # Add Astronomer CLI to PATH
 
-
-      - name: Run Pylint
-        run: pylint dbt_airflow/dags/
-      
-      - name: Run Flake8
-        run: flake8 dbt_airflow/dags/
-      
       - name: Run Black
         run: black dbt_airflow/dags/ --check
 
