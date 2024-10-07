@@ -1,19 +1,19 @@
 from airflow.models import DAG
 from pendulum import datetime
-from datetime import  timedelta
+from datetime import timedelta
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from miniocode import func,delete_folder
+from miniocode import func, delete_folder
 
 
 # Define the DAG function a set of parameters
 default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 5,
-    'retry_delay': timedelta(minutes=1),
+    "owner": "airflow",
+    "depends_on_past": False,
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 5,
+    "retry_delay": timedelta(minutes=1),
 }
 
 # Define the DAG
@@ -25,68 +25,109 @@ dag = DAG(
     catchup=False,
 )
 
+
 def task_main(**kwargs):
-    tabla=kwargs.get('Tabla')
-    schema=kwargs.get('Schema')
-    year=kwargs.get('year')
-    month=kwargs.get('month')
-    func(schema,tabla,year,month)
+    tabla = kwargs.get("Tabla")
+    schema = kwargs.get("Schema")
+    year = kwargs.get("year")
+    month = kwargs.get("month")
+    func(schema, tabla, year, month)
+
 
 def folder_delete(**kwargs):
-        
-    schema=kwargs.get('Schema')
+    schema = kwargs.get("Schema")
     delete_folder(schema)
 
 
-dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeout=timedelta(minutes=10)) # Set execution timeout)
+dummy_task_start = DummyOperator(
+    task_id="start", retries=3, execution_timeout=timedelta(minutes=10)
+)  # Set execution timeout)
 
 DI_SLT_ANFRAGE_job = PythonOperator(
-    task_id='DI_SLT_ANFRAGE_JOB',
+    task_id="DI_SLT_ANFRAGE_JOB",
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_ANFRAGE','year':2024 , 'month':9},  # Pass additional variables as keyword arguments
+    op_kwargs={
+        "Schema": "DISS",
+        "Tabla": "DI_SLT_ANFRAGE",
+        "year": 2024,
+        "month": 9,
+    },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
 
 DI_SLT_BEANSTANDUNG_job = PythonOperator(
-    task_id='DI_SLT_BEANSTANDUNG',
+    task_id="DI_SLT_BEANSTANDUNG",
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BEANSTANDUNG','year':2024 , 'month':9 } ,  # Pass additional variables as keyword arguments
+    op_kwargs={
+        "Schema": "DISS",
+        "Tabla": "DI_SLT_BEANSTANDUNG",
+        "year": 2024,
+        "month": 9,
+    },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
 
 DI_SLT_BILDPOSITION_job = PythonOperator(
-    task_id='DI_SLT_BILDPOSITION',
+    task_id="DI_SLT_BILDPOSITION",
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_BILDPOSITION','year':2024 , 'month':9},  # Pass additional variables as keyword arguments
+    op_kwargs={
+        "Schema": "DISS",
+        "Tabla": "DI_SLT_BILDPOSITION",
+        "year": 2024,
+        "month": 9,
+    },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
 
 DI_SLT_NACHRICHT_job = PythonOperator(
-    task_id='DI_SLT_NACHRICHT',
+    task_id="DI_SLT_NACHRICHT",
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_NACHRICHT', 'year':2024 , 'month':9 },  # Pass additional variables as keyword arguments
+    op_kwargs={
+        "Schema": "DISS",
+        "Tabla": "DI_SLT_NACHRICHT",
+        "year": 2024,
+        "month": 9,
+    },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
 
 DI_SLT_RANDBEDINGUNG_job = PythonOperator(
-    task_id='DI_SLT_RANDBEDINGUNG',
+    task_id="DI_SLT_RANDBEDINGUNG",
     python_callable=task_main,
-    op_kwargs={'Schema':'DISS'  , 'Tabla':'DI_SLT_RANDBEDINGUNG','year':2024 , 'month':9},  # Pass additional variables as keyword arguments
+    op_kwargs={
+        "Schema": "DISS",
+        "Tabla": "DI_SLT_RANDBEDINGUNG",
+        "year": 2024,
+        "month": 9,
+    },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
 )
 dag_delete_folder = PythonOperator(
-    task_id='delete_folder',
-    op_kwargs={'Schema':'DISS' },
+    task_id="delete_folder",
+    op_kwargs={"Schema": "DISS"},
     provide_context=True,
     python_callable=folder_delete,
     dag=dag,
 )
 
-dummy_task_end = DummyOperator(task_id='end', retries=3,    execution_timeout=timedelta(minutes=10) )# Set execution timeout)
+dummy_task_end = DummyOperator(
+    task_id="end", retries=3, execution_timeout=timedelta(minutes=10)
+)  # Set execution timeout)
 
-dummy_task_start>>[DI_SLT_ANFRAGE_job,DI_SLT_BEANSTANDUNG_job,DI_SLT_BILDPOSITION_job,DI_SLT_NACHRICHT_job,DI_SLT_RANDBEDINGUNG_job]>>dag_delete_folder>>dummy_task_end
+(
+    dummy_task_start
+    >> [
+        DI_SLT_ANFRAGE_job,
+        DI_SLT_BEANSTANDUNG_job,
+        DI_SLT_BILDPOSITION_job,
+        DI_SLT_NACHRICHT_job,
+        DI_SLT_RANDBEDINGUNG_job,
+    ]
+    >> dag_delete_folder
+    >> dummy_task_end
+)

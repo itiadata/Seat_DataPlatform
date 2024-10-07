@@ -8,16 +8,15 @@ from airflow.contrib.operators.snowflake_operator import SnowflakeOperator
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-args = {"owner": "Airflow", "start_date": datetime(2021,3,22,17,15)}
+args = {"owner": "Airflow", "start_date": datetime(2021, 3, 22, 17, 15)}
 
-dag = DAG(
-    dag_id="snowflake_connector3", default_args=args, schedule_interval=None
-)
+dag = DAG(dag_id="snowflake_connector3", default_args=args, schedule_interval=None)
 
 query1 = [
     """select 1;""",
     """show tables in database ft_db;""",
 ]
+
 
 def count1(**context):
     dwh_hook = SnowflakeHook(snowflake_conn_id="snowflake_id")

@@ -2,18 +2,17 @@ from airflow.models import DAG
 from datetime import datetime, timedelta
 from airflow.operators.python_operator import PythonOperator
 from airflow.operators.dummy_operator import DummyOperator
-from rvscode import createstage,delete_folder
-
+from rvscode import createstage, delete_folder
 
 
 # Define the DAG function a set of parameters
 default_args = {
-    'owner': 'airflow',
-    'depends_on_past': False,
-    'email_on_failure': False,
-    'email_on_retry': False,
-    'retries': 5,
-    'retry_delay': timedelta(minutes=1),
+    "owner": "airflow",
+    "depends_on_past": False,
+    "email_on_failure": False,
+    "email_on_retry": False,
+    "retries": 5,
+    "retry_delay": timedelta(minutes=1),
 }
 
 # Define the DAG
@@ -26,13 +25,13 @@ dag = DAG(
 )
 
 
-    
-dummy_task_start = DummyOperator(task_id='start', retries=3,     execution_timeout=timedelta(minutes=10)) # Set execution timeout)
-
+dummy_task_start = DummyOperator(
+    task_id="start", retries=3, execution_timeout=timedelta(minutes=10)
+)  # Set execution timeout)
 
 
 CreateStageJob = PythonOperator(
-    task_id='CREATE_AND_COPY_DATA',
+    task_id="CREATE_AND_COPY_DATA",
     python_callable=createstage,
     op_kwargs={},  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -41,7 +40,7 @@ CreateStageJob = PythonOperator(
 
 
 deletefolder = PythonOperator(
-    task_id='DELETE_FOLDER',
+    task_id="DELETE_FOLDER",
     python_callable=delete_folder,
     op_kwargs={},  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -49,4 +48,4 @@ deletefolder = PythonOperator(
 )
 
 
-dummy_task_start>>CreateStageJob>>deletefolder
+dummy_task_start >> CreateStageJob >> deletefolder
