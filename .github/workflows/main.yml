@@ -32,6 +32,12 @@ jobs:
   
       - name: Run Black
         run: black dbt_airflow/dags/ --check || (black dbt_airflow/dags/ && echo "Reformatted code.")
+ 
+      - name: Run Flake8
+        run: |
+          flake8 dbt_airflow/dags/ || (echo "Flake8 found issues." && exit 1)
+
+
 
 
   test-dbt:
