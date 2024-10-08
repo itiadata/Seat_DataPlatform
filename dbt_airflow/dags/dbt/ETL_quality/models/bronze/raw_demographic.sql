@@ -8,7 +8,7 @@ WITH demographics AS (
     *
   FROM {{ source('COVID19_EPIDEMIOLOGICAL_DATA', 'DEMOGRAPHICS') }}
 
-  
+
 )
 
 SELECT *

@@ -98,7 +98,7 @@ def snowflake_con(schema):
     return engine
 
 
-hostname = "storage.esqa.dapc.ocp.vwgroup.com"
+hostname = minio_url
 
 
 def insert_to_sourcetable(name, conn):
@@ -204,7 +204,6 @@ def func(schema, tabla, year, month):
 
     prefix = schema
     recursive = True
-    sleep(5)
     # procese de descarga de los parquet y su tratamiento
     try:
         if (
@@ -296,11 +295,3 @@ def func(schema, tabla, year, month):
 
     except S3Error as e:
         print(f"Error listing objects: {e}")
-
-
-"""
-CARPORT
-DISS
-DIAGNOSE
-SAGA
-"""

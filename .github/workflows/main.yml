@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - developement
 
 jobs:
   lint-python:
@@ -11,12 +12,12 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.x'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -29,17 +30,17 @@ jobs:
         run: |
           curl -sSL https://install.astronomer.io | bash  # Install Astronomer CLI
           echo "$HOME/.astronomer/bin" >> $GITHUB_PATH  # Add Astronomer CLI to PATH
-  
+
       - name: Run Black
         run: black dbt_airflow/dags/ --check || (black dbt_airflow/dags/ && echo "Reformatted code.")
- 
+
       - name: Run Flake8
         run: |
           flake8 dbt_airflow/dags/ || (echo "Flake8 found issues." && exit 1)
 
 
       - name: Run Bandit
-        run: bandit -r dbt_airflow/dags/ 
+        run: bandit -r dbt_airflow/dags/
 
 
 
@@ -58,7 +59,7 @@ jobs:
       - name: Install dbt
         run: |
           pip install dbt --user
-      
+
       - name: Check for dbt_project.yml
         id: check_dbt
         run: |
@@ -69,7 +70,7 @@ jobs:
             echo "DBT project file not found."
             echo "found=false" >> $GITHUB_ENV
           fi
-      
+
       - name: Run dbt tests
         if: env.found == 'true'
         run: |
