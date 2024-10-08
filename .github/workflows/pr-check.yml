@@ -10,9 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check if commit is from a Pull Request
-        if: github.event_name != 'pull_request'
+        if: ${{ github.event.pull_request == '' }}
         run: |
-          echo "Commits should only be done via a Pull Request"
+          echo "Commits directly to main are not allowed. Please use a Pull Request."
           exit 1
       - name: Checkout code
         uses: actions/checkout@v2
