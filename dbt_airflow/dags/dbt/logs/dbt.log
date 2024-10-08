@@ -5,7 +5,7 @@
 [0m09:03:40.635251 [info ] [MainThread]: Running with dbt=1.7.9
 [0m09:03:40.635539 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'warn_error': 'None', 'version_check': 'True', 'fail_fast': 'False', 'log_path': 'logs', 'profiles_dir': '/Users/sxawwla/.dbt', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'no_print': 'None', 'quiet': 'False', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'static_parser': 'True', 'introspect': 'True', 'log_format': 'default', 'target_path': 'None', 'invocation_command': 'dbt init', 'send_anonymous_usage_stats': 'True'}
 [0m09:03:58.013693 [debug] [MainThread]: Starter project path: /Users/sxawwla/anaconda3/lib/python3.11/site-packages/dbt/include/starter_project
-[0m09:03:58.026338 [info ] [MainThread]: 
+[0m09:03:58.026338 [info ] [MainThread]:
 Your new dbt project "ETL_quality" was created!
 
 For more information on how to configure the profiles.yml file,
@@ -90,7 +90,7 @@ open /Users/sxawwla/.dbt
 Runtime Error
   No dbt_project.yml found at expected path /Users/sxawwla/Documents/GitHub/AirflowDBTdev/dbt_airflow/dbt/dbt_project.yml
   Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
-  
+
 [0m09:19:52.841311 [debug] [MainThread]: Resource report: {"command_name": "deps", "command_wall_clock_time": 0.03922575, "process_user_time": 0.755273, "process_kernel_time": 0.118021, "process_mem_max_rss": "116129792", "command_success": false, "process_in_blocks": "0", "process_out_blocks": "0"}
 [0m09:19:52.841583 [debug] [MainThread]: Command `dbt deps` failed at 09:19:52.841526 after 0.04 seconds
 [0m09:19:52.841763 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105c59150>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105c58390>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x105c5a2d0>]}

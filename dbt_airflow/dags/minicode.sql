@@ -32,10 +32,10 @@ CREATE TABLE IF NOT EXISTS  PRO_BRONZE_DB.{schema}.{nametable}
         )
       ));
 
-  
+
 --@createtabletaux
 CREATE TABLE IF NOT EXISTS  PRO_BRONZE_DB.{schema}.{taux_nametable} LIKE PRO_BRONZE_DB.{schema}.{nametable};
-   
+
 --@createformat
 CREATE FILE FORMAT IF NOT EXISTS  PRO_BRONZE_DB.{schema}.my_parquet_format
   TYPE = 'PARQUET'
@@ -75,11 +75,11 @@ USE DATABASE PRO_BRONZE_DB;
 insert into PRO_BRONZE_DB.{schema}.{nametable} (
   select  A.*, CONVERT_TIMEZONE('UTC',CURRENT_TIMESTAMP())::TIMESTAMP_NTZ AS INSERT_DATE_UTC
 
-  from 
+  from
     (
       select * exclude INSERT_DATE_UTC
       from PRO_BRONZE_DB.{schema}.{taux_nametable}
-      minus 
+      minus
       select * exclude INSERT_DATE_UTC
       from PRO_BRONZE_DB.{schema}.{nametable}
     )A

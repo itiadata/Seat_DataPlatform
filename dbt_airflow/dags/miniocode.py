@@ -98,8 +98,8 @@ def snowflake_con(schema):
     return engine
 
 
-
 hostname = minio_url
+
 
 def insert_to_sourcetable(name, conn):
     partes = name.split("/")
@@ -295,5 +295,3 @@ def func(schema, tabla, year, month):
 
     except S3Error as e:
         print(f"Error listing objects: {e}")
-
-
