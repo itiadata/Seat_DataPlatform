@@ -98,8 +98,7 @@ def snowflake_con(schema):
     return engine
 
 
-hostname = "storage.esqa.dapc.ocp.vwgroup.com"
-
+hostname = minio_url
 
 def insert_to_sourcetable(name, conn):
     partes = name.split("/")
