@@ -26,7 +26,7 @@ jobs:
       - name: Merge development into main
         run: |
           git checkout main   # Cambia a la rama main
-          git merge development  # Hace merge de development a main
+          git merge develop  # Hace merge de development a main
           git push origin main  # Hace push de los cambios a la rama main
 
       - name: Notify success
