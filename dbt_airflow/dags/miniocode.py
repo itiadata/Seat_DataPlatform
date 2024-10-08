@@ -204,7 +204,6 @@ def func(schema, tabla, year, month):
 
     prefix = schema
     recursive = True
-    sleep(5)
     # procese de descarga de los parquet y su tratamiento
     try:
         if (
@@ -298,9 +297,3 @@ def func(schema, tabla, year, month):
         print(f"Error listing objects: {e}")
 
 
-"""
-CARPORT
-DISS
-DIAGNOSE
-SAGA
-"""

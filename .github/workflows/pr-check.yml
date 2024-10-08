@@ -1,0 +1,18 @@
+name: PR Check
+
+on:
+  push:
+    branches:
+      - main  # La rama que quieres proteger
+
+jobs:
+  check-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if commit is from a Pull Request
+        if: github.event_name != 'pull_request'
+        run: |
+          echo "Commits should only be done via a Pull Request"
+          exit 1
+      - name: Checkout code
+        uses: actions/checkout@v2

@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - developement
 
 jobs:
   lint-python:
