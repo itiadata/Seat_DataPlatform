@@ -3,7 +3,7 @@ name: PR Check
 on:
   push:
     branches:
-      - main  # La rama que quieres proteger
+      - develop  # La rama que quieres proteger
 
 jobs:
   check-pr:
