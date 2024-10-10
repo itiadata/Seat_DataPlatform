@@ -25,9 +25,10 @@ jobs:
 
       - name: Merge development into main
         run: |
-          git checkout main   # Cambia a la rama main
-          git merge develop  # Hace merge de development a main
-          git push origin main  # Hace push de los cambios a la rama main
+          git checkout main  # Switch to the main branch
+          git fetch origin  # Fetch the latest changes from the remote
+          git merge develop --allow-unrelated-histories  # Merge develop into main allowing unrelated histories
+          git push origin main  # Push the changes to the remote main branch
 
       - name: Notify success
         run: echo "Merge from development to main completed successfully."
