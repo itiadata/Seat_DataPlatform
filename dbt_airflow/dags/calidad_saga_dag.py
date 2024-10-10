@@ -51,7 +51,7 @@ SA_SLT_ANTRSCHADEN_job = PythonOperator(
         "Schema": "SAGA",
         "Tabla": "SA_SLT_ANTRSCHADEN",
         "year": 2024,
-        "month": 10,
+        "month": 9,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -64,7 +64,7 @@ SA_SLT_ANTRSCHADEN_APETFLFM_job = PythonOperator(
         "Schema": "SAGA",
         "Tabla": "SA_SLT_ANTRSCHADEN_APETFLFM",
         "year": 2024,
-        "month": 10,
+        "month": 9,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
