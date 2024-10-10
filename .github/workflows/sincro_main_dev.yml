@@ -1,0 +1,41 @@
+name: Check Branch Status with Develop
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+jobs:
+  check_branch:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Fetch all branches
+      run: git fetch --all
+
+    - name: Check if the branch is ahead of upstream/develop
+      run: |
+        UPSTREAM='origin/develop'
+        LOCAL=$(git rev-parse @)
+        REMOTE=$(git rev-parse "$UPSTREAM")
+        BASE=$(git merge-base @ "$UPSTREAM")
+
+        if [ $LOCAL = $REMOTE ]; then
+          echo "Your branch is up-to-date."
+        elif [ $LOCAL = $BASE ]; then
+          echo "Your branch is behind upstream/develop. You should pull changes."
+          exit 1
+        elif [ $REMOTE = $BASE ]; then
+          echo "Your branch is ahead of upstream/develop."
+        else
+          echo "Your branch has diverged from upstream/develop."
+          exit 1
+        fi
+
+    - name: Fetch updates from upstream/develop if behind
+      if: failure() # Only fetch if branch is behind
+      run: git pull origin develop
