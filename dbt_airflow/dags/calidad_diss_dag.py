@@ -50,7 +50,7 @@ DI_SLT_ANFRAGE_job = PythonOperator(
         "Schema": "DISS",
         "Tabla": "DI_SLT_ANFRAGE",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -63,7 +63,7 @@ DI_SLT_BEANSTANDUNG_job = PythonOperator(
         "Schema": "DISS",
         "Tabla": "DI_SLT_BEANSTANDUNG",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -76,7 +76,7 @@ DI_SLT_BILDPOSITION_job = PythonOperator(
         "Schema": "DISS",
         "Tabla": "DI_SLT_BILDPOSITION",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -89,7 +89,7 @@ DI_SLT_NACHRICHT_job = PythonOperator(
         "Schema": "DISS",
         "Tabla": "DI_SLT_NACHRICHT",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -102,7 +102,7 @@ DI_SLT_RANDBEDINGUNG_job = PythonOperator(
         "Schema": "DISS",
         "Tabla": "DI_SLT_RANDBEDINGUNG",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,

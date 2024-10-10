@@ -6,21 +6,20 @@ from time import sleep
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 from airflow.contrib.hooks.snowflake_hook import SnowflakeHook
 from utils.utils import execute_query_by_name
+from dotenv import load_dotenv
 import urllib3
 import socket
 import os
 import shutil
 import requests
 
+load_dotenv()
 
 # Desactivar las advertencias de verificación de SSL
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
 dbt_project_path = "/usr/local/airflow/dags/"
-acces_key = os.getenv("acces_key")
-secret_key = os.getenv("secret_key")
-minio_url = os.getenv("minio_url")
 
 
 def delete_folder(schema):
@@ -98,9 +97,6 @@ def snowflake_con(schema):
     return engine
 
 
-hostname = minio_url
-
-
 def insert_to_sourcetable(name, conn):
     partes = name.split("/")
     table = partes[1]
@@ -168,7 +164,17 @@ def processwritesnowflake(object_name, client, bucket_name, engine, tabla, firsl
 
 
 def func(schema, tabla, year, month):
+    acces_key = os.getenv("acces_key")
+    secret_key = os.getenv("secret_key")
+    minio_url = os.getenv("minio_url")
+    hostname = minio_url
+
     # procerso principal para la transformaciond de parquet a pandas para escribir hacía snowflake
+
+    if not acces_key or not secret_key or not minio_url:
+        raise ValueError(
+            "Una o más variables de entorno no están configuradas correctamente"
+        )
 
     # conexion con minIO
     try:

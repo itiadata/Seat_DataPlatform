@@ -50,7 +50,7 @@ CA_SLT_FAHRZEUG_JOB = PythonOperator(
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -74,7 +74,7 @@ CA_SLT_FAHRZEUG_PRNR_JOB = PythonOperator(
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -87,7 +87,7 @@ CA_SLT_FAHRZEUG_PRNR_STRING_JOB = PythonOperator(
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR_STRING",
         "year": 2024,
-        "month": 9,
+        "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
