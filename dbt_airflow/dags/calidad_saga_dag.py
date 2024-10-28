@@ -50,7 +50,7 @@ SA_SLT_ANTRSCHADEN_job = PythonOperator(
     op_kwargs={
         "Schema": "SAGA",
         "Tabla": "SA_SLT_ANTRSCHADEN",
-        "year": 2024,
+        "year": 2023,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -63,7 +63,7 @@ SA_SLT_ANTRSCHADEN_APETFLFM_job = PythonOperator(
     op_kwargs={
         "Schema": "SAGA",
         "Tabla": "SA_SLT_ANTRSCHADEN_APETFLFM",
-        "year": 2024,
+        "year": 2023,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,

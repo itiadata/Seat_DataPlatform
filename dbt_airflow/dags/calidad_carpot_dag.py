@@ -40,7 +40,7 @@ def folder_delete(**kwargs):
 
 
 dummy_task_start = DummyOperator(
-    task_id="start", retries=3, execution_timeout=timedelta(minutes=10)
+    task_id="start", retries=3, execution_timeout=timedelta(minutes=1)
 )  # Set execution timeout)
 
 CA_SLT_FAHRZEUG_JOB = PythonOperator(
@@ -49,8 +49,8 @@ CA_SLT_FAHRZEUG_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -73,8 +73,8 @@ CA_SLT_FAHRZEUG_PRNR_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -86,8 +86,8 @@ CA_SLT_FAHRZEUG_PRNR_STRING_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR_STRING",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -102,7 +102,7 @@ dag_delete_folder = PythonOperator(
 )
 
 dummy_task_end = DummyOperator(
-    task_id="end", retries=3, execution_timeout=timedelta(minutes=10)
+    task_id="end", retries=3, execution_timeout=timedelta(minutes=1)
 )  # Set execution timeout)
 
 (
