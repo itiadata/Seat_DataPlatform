@@ -1,0 +1,12 @@
+version: "1"
+context:
+  active-host: "jj740.eu2.dbt.com"
+  active-project: "175956220182697"
+projects:
+  - project-name: "SEAT-DATACUPRAGARAGE"
+    project-id: "175956220182697"
+    account-name: "SEAT S.A. (Evaluation)"
+    account-id: "175956220182589"
+    account-host: "jj740.eu2.dbt.com"
+    token-name: "cloud-cli-52e9"
+    token-value: "dbtu_dQC9OdYaVRPyAAODpCaBXj4K1u2_7Gpb6OV70uPfXFCw3zfgsw"

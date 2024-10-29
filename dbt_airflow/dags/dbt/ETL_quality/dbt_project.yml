@@ -6,6 +6,9 @@ name : 'ETL_quality'
 version: '1.0.0'
 config-version: 2
 
+dbt-cloud:
+    project-id: 175956220182697
+
 # This setting configures which "profile" dbt uses for this project.
 profile: 'ETL_quality'
 

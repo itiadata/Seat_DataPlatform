@@ -12,7 +12,7 @@ default_args = {
     "depends_on_past": False,
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 10,
+    "retries": 1,
     "retry_delay": timedelta(minutes=1),
 }
 
@@ -40,7 +40,7 @@ def folder_delete(**kwargs):
 
 
 dummy_task_start = DummyOperator(
-    task_id="start", retries=3, execution_timeout=timedelta(minutes=10)
+    task_id="start", retries=3, execution_timeout=timedelta(minutes=1)
 )  # Set execution timeout)
 
 DI_SLT_ANFRAGE_job = PythonOperator(
@@ -49,8 +49,8 @@ DI_SLT_ANFRAGE_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_ANFRAGE",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -62,8 +62,8 @@ DI_SLT_BEANSTANDUNG_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_BEANSTANDUNG",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -75,8 +75,8 @@ DI_SLT_BILDPOSITION_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_BILDPOSITION",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -88,8 +88,8 @@ DI_SLT_NACHRICHT_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_NACHRICHT",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -101,8 +101,8 @@ DI_SLT_RANDBEDINGUNG_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_RANDBEDINGUNG",
-        "year": 2024,
-        "month": 10,
+        "year": 2023,
+        "month": 1,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
     dag=dag,
@@ -116,7 +116,7 @@ dag_delete_folder = PythonOperator(
 )
 
 dummy_task_end = DummyOperator(
-    task_id="end", retries=3, execution_timeout=timedelta(minutes=10)
+    task_id="end", retries=3, execution_timeout=timedelta(minutes=1)
 )  # Set execution timeout)
 
 (
