@@ -223,13 +223,9 @@ def func(schema, tabla, year, month):
         else:
             objects = client.list_objects(
                 bucket_name,
-                prefix=prefix
-                + "/"
-                + tabla
-                + "/DAPC_YEAR="
-                + str(year)
-                + "/DAPC_MONTH="
-                + str(month),
+                prefix=prefix + "/" + tabla + "/DAPC_YEAR=" + str(year),
+                # + "/DAPC_MONTH="
+                # + str(month),   escomentar si se quiere hacer carga por año y mes
                 recursive=recursive,
             )
 
@@ -242,7 +238,7 @@ def func(schema, tabla, year, month):
         # execute_query_by_name('createschema', parametros,engine)
         execute_query_by_name("createcontrol", parametros, engine, "minicode.sql")
         # execute_query_by_name('createformat', parametros,engine)
-
+        # Primera carga all datat
         if (
             int(execute_query_by_name("firstload", parametros, engine, "minicode.sql"))
             == 0
@@ -258,7 +254,7 @@ def func(schema, tabla, year, month):
                         or (
                             (obj.object_name).startswith(filestart + "/DAPC_YEAR")
                             and devolver_year(name) == year
-                            and devolver_mes(name) == month
+                            # and devolver_mes(name) == month  descomentar si se quiere hacer carga por año y mes
                         )
                     )
                     and not (obj.object_name).endswith("checkpoint.parquet")
@@ -267,6 +263,7 @@ def func(schema, tabla, year, month):
                     processwritesnowflake(
                         object_name, client, bucket_name, engine, tabla, 1
                     )
+        # Carga incremental
         else:
             for obj in objects:
                 name = obj.object_name
@@ -279,7 +276,7 @@ def func(schema, tabla, year, month):
                         or (
                             (obj.object_name).startswith(filestart + "/DAPC_YEAR")
                             and devolver_year(name) == year
-                            and devolver_mes(name) == month
+                            # and devolver_mes(name) == month  escomentar si se quiere hacer carga por año y mes
                         )
                     )
                     and not (obj.object_name).endswith("checkpoint.parquet")

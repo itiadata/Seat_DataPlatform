@@ -146,15 +146,16 @@ def download_blob_to_file(conn):
         name_table = obtain_name(file)
         name_file_stage = name_table + ".csv"
         delimiter = detect_delimiter(file)
+        print(delimiter)
         path_route = file
         parametros = {
             "path_route": path_route,
-            "stage_name": "UC_FSN_MARC_TEST.FILE_CSV",
+            "stage_name": "UC_FC5_MATERIAL_COST_REPORTING.FILE_CSV",
             "name_csv": file,
             "name_csv_stage": name_file_stage,
             "name_table": name_table,
             "delimiter": delimiter,
-            "schema": "UC_FSN_MARC_TEST",
+            "schema": "UC_FC5_MATERIAL_COST_REPORTING",
             "database": "sandbox",
         }
         execute_query_by_name("databasedefintion", None, conn)
