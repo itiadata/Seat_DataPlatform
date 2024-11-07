@@ -2,7 +2,6 @@ def execute_query_by_name(query_name, params, conn, sqlfile):
     dbt_project_path = "/usr/local/airflow/dags/"
     # Lee el archivo SQL
     file_name = dbt_project_path + sqlfile
-    print(file_name)
 
     with open(file_name, "r") as file:
         contenido = file.read()

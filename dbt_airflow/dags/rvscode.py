@@ -191,7 +191,9 @@ def download_blob_to_file(conn):
 
 # función principal para que funcione todo el proceso
 def createstage():
+    # crear la conexion de snowflake
     conn = snowflake_con()
+    # funcion principañ
     download_blob_to_file(conn)
 
 

@@ -15,6 +15,6 @@ RUN python -m venv dbt_venv && \
     pip install --trusted-host pypi.org \
                 --trusted-host pypi.python.org \
                 --trusted-host files.pythonhosted.org \
-                --proxy http://10.82.32.254:80 \
+               --proxy http://10.82.32.254:80 \
                 --no-cache-dir dbt-snowflake && \
     deactivate

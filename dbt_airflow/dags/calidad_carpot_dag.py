@@ -20,7 +20,7 @@ default_args = {
 dag = DAG(
     dag_id="calidad_carpot_dag",
     default_args=default_args,  # Include default_args here
-    start_date=datetime(2023, 1, 1),
+    start_date=datetime(2022, 1, 1),
     schedule_interval="@daily",
     catchup=False,
 )
@@ -49,7 +49,7 @@ CA_SLT_FAHRZEUG_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -73,7 +73,7 @@ CA_SLT_FAHRZEUG_PRNR_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -86,7 +86,7 @@ CA_SLT_FAHRZEUG_PRNR_STRING_JOB = PythonOperator(
     op_kwargs={
         "Schema": "CARPORT",
         "Tabla": "CA_SLT_FAHRZEUG_PRNR_STRING",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,

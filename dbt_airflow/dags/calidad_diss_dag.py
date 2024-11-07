@@ -12,7 +12,7 @@ default_args = {
     "depends_on_past": False,
     "email_on_failure": False,
     "email_on_retry": False,
-    "retries": 1,
+    "retries": 5,
     "retry_delay": timedelta(minutes=1),
 }
 
@@ -49,7 +49,7 @@ DI_SLT_ANFRAGE_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_ANFRAGE",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -62,7 +62,7 @@ DI_SLT_BEANSTANDUNG_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_BEANSTANDUNG",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -75,7 +75,7 @@ DI_SLT_BILDPOSITION_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_BILDPOSITION",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -88,7 +88,7 @@ DI_SLT_NACHRICHT_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_NACHRICHT",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,
@@ -101,7 +101,7 @@ DI_SLT_RANDBEDINGUNG_job = PythonOperator(
     op_kwargs={
         "Schema": "DISS",
         "Tabla": "DI_SLT_RANDBEDINGUNG",
-        "year": 2023,
+        "year": 2022,
         "month": 10,
     },  # Pass additional variables as keyword arguments
     provide_context=True,

@@ -163,6 +163,7 @@ def processwritesnowflake(object_name, client, bucket_name, engine, tabla, firsl
         print(f"File or directory {dbt_project_path+object_name} does not exist.")
 
 
+# Funcion principal codigo
 def func(schema, tabla, year, month):
     acces_key = os.getenv("acces_key")
     secret_key = os.getenv("secret_key")
@@ -207,7 +208,7 @@ def func(schema, tabla, year, month):
     )
 
     bucket_name = "sqa-sz-storage"
-
+    # definicion del schema hacia donde se va escribir
     prefix = schema
     recursive = True
     # procese de descarga de los parquet y su tratamiento
@@ -225,7 +226,7 @@ def func(schema, tabla, year, month):
                 bucket_name,
                 prefix=prefix + "/" + tabla + "/DAPC_YEAR=" + str(year),
                 # + "/DAPC_MONTH="
-                # + str(month),   escomentar si se quiere hacer carga por año y mes
+                # + str(month),   descomentar si se quiere hacer carga por año y mes
                 recursive=recursive,
             )
 

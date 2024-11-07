@@ -32,17 +32,18 @@ CREATE OR REPLACE FILE FORMAT {schema}.CSV_FILE_FORMAT
     FIELD_OPTIONALLY_ENCLOSED_BY = '"'
     PARSE_HEADER = TRUE
     TRIM_SPACE = TRUE
-    NULL_IF = ('NULL')
-    COMPRESSION = 'GZIP';
+    NULL_IF = ('NULL', '')
+    REPLACE_INVALID_CHARACTERS = TRUE
+    DATE_FORMAT = 'AUTO'
+    TIME_FORMAT = 'AUTO'
+    TIMESTAMP_FORMAT = 'AUTO';
+
 
 
 
 --@copyinto
-
-
-
 COPY INTO {schema}.{name_table}
-FROM @{stage_name}/{{name_table}}
+FROM @{stage_name}/{name_table}
 FILE_FORMAT = (FORMAT_NAME = '{schema}.CSV_FILE_FORMAT')
 MATCH_BY_COLUMN_NAME = CASE_SENSITIVE
 ON_ERROR = 'CONTINUE';
