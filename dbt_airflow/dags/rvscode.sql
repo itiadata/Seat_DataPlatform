@@ -38,9 +38,6 @@ CREATE FILE FORMAT IF NOT EXISTS  rvs_table.PARQUET_FILE_FORMAT
   COMPRESSION = 'SNAPPY';
 
 --@copyinto
-
-
-
 COPY INTO rvs_table.{name_table}
 FROM @{stage_name}/{name_csv}
 FILE_FORMAT = (FORMAT_NAME = 'RVS.RVS_TABLE.CSV_FILE_FORMAT')

@@ -150,12 +150,12 @@ def download_blob_to_file(conn):
         path_route = file
         parametros = {
             "path_route": path_route,
-            "stage_name": "UC_FC5_MATERIAL_COST_REPORTING.FILE_CSV",
+            "stage_name": "UC_PL6_INICIATIVA7.FILE_CSV",  # stage name (manual)
             "name_csv": file,
             "name_csv_stage": name_file_stage,
             "name_table": name_table,
             "delimiter": delimiter,
-            "schema": "UC_FC5_MATERIAL_COST_REPORTING",
+            "schema": "UC_PL6_INICIATIVA7",  # schema (manual)
             "database": "sandbox",
         }
         execute_query_by_name("databasedefintion", None, conn)
