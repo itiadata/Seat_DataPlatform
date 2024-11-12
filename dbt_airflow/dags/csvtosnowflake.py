@@ -9,7 +9,7 @@ import glob
 
 
 # Variables locales
-dbt_project_path = "/usr/local/airflow/dags/"
+dbt_project_path = "/usr/local/airflow/dags/"  # imagen donde esta la carpeta de dags
 load_dotenv()
 account_url = os.getenv("account_url")
 sas_token = os.getenv("sas_token")
@@ -150,12 +150,12 @@ def download_blob_to_file(conn):
         path_route = file
         parametros = {
             "path_route": path_route,
-            "stage_name": "UC_PL6_INICIATIVA7.FILE_CSV",  # stage name (manual)
+            "stage_name": "UC_PL6_INICIATIVA7.FILE_CSV",  # stage name (manual)  nombre_schema.file_csv {SCHEMA_NAME}.NAME_STAGE
             "name_csv": file,
             "name_csv_stage": name_file_stage,
             "name_table": name_table,
             "delimiter": delimiter,
-            "schema": "UC_PL6_INICIATIVA7",  # schema (manual)
+            "schema": "UC_PL6_INICIATIVA7",  # schema (manual) m
             "database": "sandbox",
         }
         execute_query_by_name("databasedefintion", None, conn)

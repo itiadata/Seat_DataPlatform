@@ -165,6 +165,8 @@ def processwritesnowflake(object_name, client, bucket_name, engine, tabla, firsl
 
 # Funcion principal codigo
 def func(schema, tabla, year, month):
+    # date_string =str(datetime.today().strftime("%Y-%m-%d")) cuando se automatize hay que descomentar estas lineas y eliminar los parametros (year , month )
+    # year, month, day = date_string.split("-")
     acces_key = os.getenv("acces_key")
     secret_key = os.getenv("secret_key")
     minio_url = os.getenv("minio_url")
@@ -213,10 +215,8 @@ def func(schema, tabla, year, month):
     recursive = True
     # procese de descarga de los parquet y su tratamiento
     try:
-        if (
-            (schema == "STAMMDATEN")
-            or tabla == "CA_SLT_FAHRZEUG_FILTER"
-            and schema == "CARPORT"
+        if (schema == "STAMMDATEN") or (
+            tabla == "CA_SLT_FAHRZEUG_FILTER" and schema == "CARPORT"
         ):
             objects = client.list_objects(
                 bucket_name, prefix=prefix + "/" + tabla, recursive=recursive
